@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="shortcut icon" href="{% static 'img/eerf_logo_blue.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/ITSS.css' %}">
+</head>
+<body>
+    <div class="login_background">
+        <div class="locating_platform">
+            <div id="login_main_box">
+                <!-- 登录框装饰 -->
+                <div class="department_logo">
+                    <div class="logo"></div>
+                    <div class="name"></div>
+                </div>
+                <div class="illustration"></div>
+                <div class="img_left_1"></div>
+                <div class="img_left_2"></div>
+                <div class="img_right_1"></div>
+                <!-- 登录框主体 -->
+                <div class="login_box">
+                    <form action="{% url 'user:login' %}" method="post" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="login_title"></div>
+                        <div class="message">{{ msg }}</div>
+                        <div class="username_box">
+                            <div id="icon_user"></div>
+                            <input id="username" type="text" placeholder="請輸入您的賬號" name='username'>
+                        </div>
+                        <div class="password_box">
+                            <div id="icon_pass"></div>
+                            <input id="password" type="password" placeholder="請輸入您的密碼" name="password">
+                        </div>
+                        <button class="login">登錄</button>
+                        <div class="department_describe">( FATP-DATA  &  FATP-CoEx )</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{#    <script src="../static/js/jquery-3.6.0.min.js"></script>#}
+{#    <script src="../static/js/login.js"></script>#}
+    <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static '/js/class_all.js' %}"></script>
+    <script src="{% static '/js/login.js' %}"></script>
+</body>
+</html>

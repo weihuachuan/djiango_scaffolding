@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <title>index</title>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+</head>
+
+<body>
+    <div class="main">
+        <div class="first">
+            <span class="Check_time">Check_time</span>
+            <input class="input" id="Check_time" >
+        </div>
+        <div class="second">
+            <span class="Work_time">Work_time</span>
+            <input class="input" id="Work_time" >
+        </div>
+        <div class="third">
+            <span class="Add_SN">Add_SN</span>
+            <input class="input" id="Add_SN" >
+            <button value="新增" class="add">新增</button>
+        </div>
+        <div class="forth">
+            <span class="Del_SN">Del_SN</span>
+            <input class="input" id="Del_SN">
+            <button value="删除" class="remove">删除</button>
+        </div>
+        <div class="fifth">
+            <textarea type="text" class="result"></textarea>
+        </div>
+    </div>
+    
+</body>
+</body>
+
+
+<script src="{% static 'js/index.js' %}"></script>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="shortcut icon" href="{% static 'img/eerf_logo_blue.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/ITSS.css' %}">
+</head>
+<body>
+<div class="main_background">
+    <div id="head_nav">
+        <div id="head_user_date_info">
+            <div class="userinfo_group">
+                <div class="user_portrait"></div>
+                <div class="user_info">
+                    <div class="user_name" id="head_user_name">谢宇豪豪</div>
+                    <div class="user_id" id="head_user_id">F1230313</div>
+                </div>
+                <div class="log_out"></div>
+            </div>
+            <div class="dateinfo">
+                <div class="date_title">TODAY</div>
+                <div class="date">2022-12-31</div>
+            </div>
+            <div id="show_current_time" class="show_time"></div>
+        </div>
+    </div>
+    <div id="column_nav">
+        <div class="nav_title"></div>
+        <div class="nav_group">
+            <a href="{% url 'user:user_manage' %}" class="nav_item activate">
+                <div class="nav_ico user_manage"></div>
+                <div class="nav_name">用户管理</div>
+            </a>
+        </div>
+    </div>
+    <div id="main_area">
+        <div class="function_select">
+            {% if comment_data.authority == 3 or comment_data.authority == 5 or comment_data.authority == 4 %}
+                <div class="function_button_group">
+                    <button onclick="show_pop_div('user_add')">新增</button>
+                </div>
+            {% else %}
+                <div></div>
+            {% endif %}
+
+            <div id="search_mod">
+                <span class="icon"></span>
+                <input id="search_input" type="text" placeholder="search" maxlength="50"
+                       {% if keyword != '' %}value={{ keyword }}{% endif %}>
+                <div class="search" id="btn_search">搜索</div>
+            </div>
+        </div>
+        <div id="user_manage_table" class="table_show activate">
+            <div class="table_head">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="1%">姓名</th>
+                        <th width="1%">工號</th>
+                        <th width="1%">權限類別</th>
+                        <th width="1%">分機</th>
+                        {% if comment_data.authority == 3 or comment_data.authority == 5 or comment_data.authority == 4 %}
+                            <th width="1%">操作</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table_body scrollbar_style_1">
+                <table>
+                    <tbody>
+                    {% for user in user_data %}
+                        <tr>
+                            <td width="1%">{{ user.user_name }}</td>
+                            <td class="tb_user_id" width="1%">{{ user.user_id }}</td>
+                            <td width="1%">{{ user.user_permission }}</td>
+                            <td width="1%">{{ user.user_extension }}</td>
+                            {% if comment_data.authority == 3 or comment_data.authority == 5 or comment_data.authority == 4 %}
+                                <td width="1%">
+                                    <div class="table_function">
+                                        <div class="edit" onclick="edit(this)">
+                                            <span class="icon"></span>
+                                            <span class="text">修改</span>
+                                        </div>
+                                        <div class="delete" onclick="del(this)">
+                                            <span class="icon"></span>
+                                            <span class="text">刪除</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            {% endif %}
+
+                        </tr>
+                    {% endfor %}
+                    {#                    <tr>#}
+                    {#                        <td width="1%">李可愛</td>#}
+                    {#                        <td width="1%">F1231527</td>#}
+                    {#                        <td width="1%">user</td>#}
+                    {#                        <td width="1%">955668</td>#}
+                    {#                        <td width="1%">#}
+                    {#                            <div class="table_function">#}
+                    {#                                <div class="edit" onclick="show_pop_div('user_edit')">#}
+                    {#                                    <span class="icon"></span>#}
+                    {#                                    <span class="text">修改</span>#}
+                    {#                                </div>#}
+                    {#                                <div class="delete" onclick="show_pop_div('user_delete')">#}
+                    {#                                    <span class="icon"></span>#}
+                    {#                                    <span class="text">刪除</span>#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {#                        </td>#}
+                    {#                    </tr>#}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 -->
+<div id="user_add" class="modal user_add_edit">
+    <div class="modal_close" onclick="close_add_div()"></div>
+    <div class="modal_title">人員新增</div>
+    <form>
+        <div class="user_name_group">
+            <label for="add_user_name">姓名：</label>
+            <input id="add_user_name" type="text" name="user_name">
+        </div>
+        <div class="user_id_group">
+            <label for="add_user_id">工號：</label>
+            <input id="add_user_id" type="text" name="user_id">
+        </div>
+        <div class="phone_num_group">
+            <label for="add_phone_num">分機：</label>
+            <input id="add_phone_num" type="text" name="phone_num">
+        </div>
+        <div class="user_password_group">
+            <label for="add_user_password">密碼：</label>
+            <input id="add_user_password" type="text" name="user_password">
+        </div>
+        <div class="authority_group">
+            <label for="add_authority">權限：</label>
+            <select id="add_authority" name="authority">
+                {% if comment_data.authority == 3 %}
+                    <option value="op" selected="selected">op</option>
+                    <option value="engineer">engineer</option>
+                {% elif comment_data.authority == 4 %}
+                    <option value="op" selected="selected">op</option>
+                    <option value="engineer">engineer</option>
+                    <option value="dri">dri</option>
+                {% elif comment_data.authority == 5 %}
+                    <option value="op" selected="selected">op</option>
+                    <option value="engineer">engineer</option>
+                    <option value="dri">dri</option>
+                    <option value="manager">manager</option>
+                    <option value="superuser">superuser</option>
+                {% endif %}
+            </select>
+        </div>
+        <div class="message" id="add_message"></div>
+        <div class="button_group">
+            <button type="button" onclick="close_add_div()">取消</button>
+            <button class="confirm" type="submit">确定</button>
+        </div>
+    </form>
+</div>
+<div id="user_edit" class="modal user_add_edit">
+    <div class="modal_close" onclick="close_pop_div('user_edit')"></div>
+    <div class="modal_title">人員修改</div>
+    <form>
+        <div class="user_name_group">
+            <label for="edit_user_name">姓名：</label>
+            <input id="edit_user_name" type="text" name="user_name">
+        </div>
+        <div class="user_id_group">
+            <label for="edit_user_id">工號：</label>
+            <input id="edit_user_id" type="text" name="user_id">
+        </div>
+        <div class="phone_num_group">
+            <label for="edit_phone_num">分機：</label>
+            <input id="edit_phone_num" type="text" name="phone_num">
+        </div>
+        <div class="user_password_group">
+            <label for="edit_user_password">密碼：</label>
+            <input id="edit_user_password" type="text" name="user_password">
+        </div>
+        <div class="authority_group">
+            <label for="edit_authority">權限：</label>
+            <select id="edit_authority" name="authority">
+                <option value="op">op</option>
+                <option value="engineer">engineer</option>
+                <option value="dri">dri</option>
+                <option value="manager">manager</option>
+                <option value="superuser">superuser</option>
+            </select>
+        </div>
+        <div class="message" id="edit_message"></div>
+        <div class="button_group">
+            <button type="button" onclick="close_pop_div('user_edit')">取消</button>
+            <button class="confirm" type="submit">确定</button>
+        </div>
+    </form>
+</div>
+<div id="user_delete" class="modal reconfirm_popup">
+    <div class="modal_close" onclick="close_pop_div('user_delete')"></div>
+    <div class="confirm_content">
+        <div class="message" id="del_message">提示信息提示信息提示信息提示信息</div>
+        <div class="button_group">
+            <button type="button" onclick="close_pop_div('user_delete')">取消</button>
+            <button class="confirm" type="button" id="del_btn">确定</button>
+        </div>
+    </div>
+</div>
+<script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static '/js/jquery.cookie.min.js' %}"></script>
+<script src="{% static '/js/class_all.js' %}"></script>
+<script src="{% static '/js/user_manage.js' %}"></script>
+</body>
+</html>
